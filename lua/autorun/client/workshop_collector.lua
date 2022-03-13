@@ -250,7 +250,7 @@ local function WorkshopCollectorMenu()
         target_preset = presets[preset_name]
         target_preset.disabled = {}
         target_preset.enabled = DATA_CACHE.content
-        target_preset.name = DATA_CACHE.name
+        target_preset.name = preset_name
         target_preset.newAction = ""
         
         GUI.CreateReadMeAndDir()
