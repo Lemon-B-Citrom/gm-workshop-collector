@@ -280,7 +280,7 @@ Please don't delete me, otherwise Workshop Collector will break!
         
         SaveAddonPresets(util.TableToJSON(presets))
         surface.PlaySound("ui/chat_display_text.wav")
-        Derma_Message("Preset \""..preset_name.."\" created!")
+        Derma_Message("Preset \""..preset_name.."\" created! \n\nYour game must be restarted for this to take effect.")
     end
 
     -- View workshop item
