@@ -256,6 +256,7 @@ concommand.Add("workshop_collector_menu", WorkshopCollectorMenu)
         
         GUI.CreateReadMeAndDir()
         file.Write("workshop_collector/addonpresets.txt", util.TableToJSON(presets))
+        surface.PlaySound("ui/chat_display_text.wav")
         Derma_Message("Preset \""..preset_name.."\" created in GarrysMod\\garrysmod\\data\\workshop_collector", "Success")
     end
 
@@ -319,9 +320,9 @@ if not file.Exists("workshop_collector/is_running_menu_install.txt", "DATA") the
         spawnmenu.AddToolMenuOption(
             "Utilities", "User", "WorkshopCollectorToolMenu", 
             "Workshop Collector", "", "", function(pnl)
+                pnl:Help("You currently have the old version of Workshop Collector installed. See the guide for information on how to use the improved new version.")
+                pnl:Button("Open Guide", "workshop_collector_link")
                 pnl:Help("Open The OLD Workshop Collector")
-                pnl:Help("See the guide for information on how to use the improved new version")
-                pnl:Button("Go to page", "workshop_collector_link")
                 pnl:Button("Open Menu", "workshop_collector_menu")
             end)
     end)

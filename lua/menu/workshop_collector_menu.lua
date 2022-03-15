@@ -269,7 +269,7 @@ Please don't delete me, otherwise Workshop Collector will break!
     -- Submit Collection
     GUI.Submit.DoClick = function()
         local preset_name = DATA_CACHE.name.." ("..DATA_CACHE.id..")"
-        presets = util.JSONToTable(file.Read("settings/addonpresets.txt", true))
+        presets = util.JSONToTable(LoadAddonPresets())
         presets[preset_name] = {}
         
         target_preset = presets[preset_name]
@@ -278,12 +278,12 @@ Please don't delete me, otherwise Workshop Collector will break!
         target_preset.name = preset_name
         target_preset.newAction = ""
         
-        file.Write("workshop_collector/addonpresets.txt", util.TableToJSON(presets))
-        Derma_Message("Preset \""..preset_name.."\" created in GarrysMod\\garrysmod\\data\\workshop_collector", "Success")
+        SaveAddonPresets(util.TableToJSON(presets))
+        surface.PlaySound("ui/chat_display_text.wav")
+        Derma_Message("Preset \""..preset_name.."\" created!")
     end
 
     -- View workshop item
-    -- -TODO- Why does this syntax work but not
     -- GUI.Display.DoDoubleClick = function(lineID, line)
     function GUI.Display:DoDoubleClick(lineID, line)
         local workshop_id = line:GetColumnText(1)
