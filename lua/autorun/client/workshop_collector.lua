@@ -261,8 +261,6 @@ concommand.Add("workshop_collector_menu", WorkshopCollectorMenu)
     end
 
     -- View workshop item
-    -- -TODO- Why does this syntax work but not
-    -- GUI.Display.DoDoubleClick = function(lineID, line)
     function GUI.Display:DoDoubleClick(lineID, line)
         local workshop_id = line:GetColumnText(1)
         gui.OpenURL("https://steamcommunity.com/sharedfiles/filedetails/?id="..workshop_id)

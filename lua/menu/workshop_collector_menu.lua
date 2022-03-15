@@ -284,7 +284,6 @@ Please don't delete me, otherwise Workshop Collector will break!
     end
 
     -- View workshop item
-    -- GUI.Display.DoDoubleClick = function(lineID, line)
     function GUI.Display:DoDoubleClick(lineID, line)
         local workshop_id = line:GetColumnText(1)
         gui.OpenURL("https://steamcommunity.com/sharedfiles/filedetails/?id="..workshop_id)
