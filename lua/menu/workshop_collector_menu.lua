@@ -5,6 +5,22 @@ local LAST_WORKSHOP = "Collection URL or ID here"
 local DATA_CACHE = {}
 
 --------------------------------------------------------------------------------
+-- Create is_running_menu_install.txt to notify the client that a menu version
+-- is indeed installed
+--------------------------------------------------------------------------------
+text = [[
+Dearest user,
+
+Please don't delete me, otherwise Workshop Collector will break!
+Don't you love workarounds?
+
+Yours truly,
+Lemon
+]]
+file.CreateDir("workshop_collector")
+file.Write("workshop_collector/is_running_menu_install.txt", text)
+
+--------------------------------------------------------------------------------
 -- Find the ID from a given URL or ID
 --------------------------------------------------------------------------------
 GUI.GetWorkshopID = function(p_string)
@@ -174,15 +190,19 @@ end
 -- Load Menu
 --------------------------------------------------------------------------------
 local function WorkshopCollectorMenu()
-    
     -- Frame
     local frame_width = SCRW/4
     local frame_height = SCRH/4
     local frame_posx = SCRW/2 - frame_width/2
     local frame_posy = SCRH/2 - frame_height/2
     GUI.Frame = vgui.Create("DFrame")
-    GUI.Frame:SetTitle("Old Workshop Collector")
+    GUI.Frame:SetTitle("Workshop Collector")
     GUI.Frame:SetSize(frame_width, frame_height)
+    text = [[
+Please don't delete me, otherwise Workshop Collector will break!
+]]
+    file.CreateDir("workshop_collector")
+    file.Write("workshop_collector/is_running_menu_install.txt", text)
     GUI.Frame:SetPos(frame_posx, frame_posy)
     GUI.Frame:SetDraggable(true)
     GUI.Frame:ShowCloseButton(true)
@@ -196,13 +216,17 @@ local function WorkshopCollectorMenu()
     GUI.EntryLabel:SetText("Link or ID of a Workshop collection:")
     GUI.Entry = vgui.Create("DTextEntry", GUI.Frame)
     GUI.Entry:SetPos(10, 50)
-concommand.Add("workshop_collector_menu", WorkshopCollectorMenu)
     GUI.Entry:SetSize(frame_width - 20, 20)
     GUI.Entry:SetText(LAST_WORKSHOP)
     GUI.Query = vgui.Create("DButton", GUI.Frame)
     GUI.Query:SetPos(10, 70)
     GUI.Query:SetSize((frame_width - 20)/2, 20)
     GUI.Query:SetText("Select Collection")
+    text = [[
+Please don't delete me, otherwise Workshop Collector will break!
+]]
+    file.CreateDir("workshop_collector")
+    file.Write("workshop_collector/is_running_menu_install.txt", text)
     GUI.Submit = vgui.Create("DButton", GUI.Frame)
     GUI.Submit:SetPos(frame_width/2, 70)
     GUI.Submit:SetSize((frame_width - 20)/2, 20)
@@ -254,7 +278,6 @@ concommand.Add("workshop_collector_menu", WorkshopCollectorMenu)
         target_preset.name = preset_name
         target_preset.newAction = ""
         
-        GUI.CreateReadMeAndDir()
         file.Write("workshop_collector/addonpresets.txt", util.TableToJSON(presets))
         Derma_Message("Preset \""..preset_name.."\" created in GarrysMod\\garrysmod\\data\\workshop_collector", "Success")
     end
@@ -268,81 +291,4 @@ concommand.Add("workshop_collector_menu", WorkshopCollectorMenu)
     end
 end
 
---------------------------------------------------------------------------------
--- Create readme file
---------------------------------------------------------------------------------
-GUI.CreateReadMeAndDir = function()
-    text = [[
-### README ###
-
-How to Install:
----------------
-1. Close Garry's Mod
-2. Navigate to GarrysMod\garrysmod\settings
-3. Rename addonpresets.txt into addonpresets_bak.txt
-4. Copy the addonpresets.txt in this data folder to GarrysMod\garrysmod\settings
-5. Start Garry's Mod
-6. Your preset should now be listed and selectable
-
-"Un-installation" if your presets are broken:
-------------------
-1. Close Garry's Mod
-2. Navigate to GarrysMod\garrysmod\settings
-3. Delete addonpresets.txt into 
-4. Rename addonpresets_bak.txt to addonpresets.txt
-5. Start Garry's Mod
-6. Things should be how you left them
-]]
-    file.CreateDir("workshop_collector")
-    file.Write("workshop_collector/README.txt", text)
-end
-
---------------------------------------------------------------------------------
--- Determine what type of install the player has
--- -TODO- this is a mess
---------------------------------------------------------------------------------
--- No manual install: run the client state menu
-if not file.Exists("workshop_collector/is_running_menu_install.txt", "DATA") then
-    print("no manual install exists")
-    -- Old menu command
-    concommand.Add("workshop_collector_menu", function()
-        WorkshopCollectorMenu()
-    end)
-    
-    -- Shoot open the guide
-    concommand.Add("workshop_collector_link", function()
-        gui.OpenURL("https://steamcommunity.com/sharedfiles/filedetails/?id=2779220212")
-    end)
-
-    -- Hook old menu
-    hook.Add("PopulateToolMenu", "WorkshopCollectorPopulateToolMenu", function()
-        spawnmenu.AddToolMenuOption(
-            "Utilities", "User", "WorkshopCollectorToolMenu", 
-            "Workshop Collector", "", "", function(pnl)
-                pnl:Help("Open The OLD Workshop Collector")
-                pnl:Help("See the guide for information on how to use the improved new version")
-                pnl:Button("Go to page", "workshop_collector_link")
-                pnl:Button("Open Menu", "workshop_collector_menu")
-            end)
-    end)
-
--- Manual install exists: run the menu state menu with a popup
-else
-    print("manual install exists")
-    -- New menu command
-    concommand.Add("workshop_collector_menu_popup", function()
-        Derma_Message("Check your escape menu for the Workshop Collector menu")
-        LocalPlayer():ConCommand("workshop_collector_menu")
-    end)
-
-    -- Hook new menu through spawnmenu
-    hook.Add("PopulateToolMenu", "WorkshopCollectorPopulateToolMenu", function()
-        spawnmenu.AddToolMenuOption(
-            "Utilities", "User", "WorkshopCollectorToolMenu", 
-            "Workshop Collector", "", "", function(pnl)
-                pnl:Help("Open The Workshop Collector in the escape menu")
-                pnl:Button("Open Menu", "workshop_collector_menu_popup")
-            end)
-    end)
-end
---------------------------------------------------------------------------------
+concommand.Add("workshop_collector_menu", WorkshopCollectorMenu)
