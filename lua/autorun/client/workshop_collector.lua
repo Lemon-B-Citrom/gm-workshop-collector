@@ -245,7 +245,11 @@ concommand.Add("workshop_collector_menu", WorkshopCollectorMenu)
     -- Submit Collection
     GUI.Submit.DoClick = function()
         local preset_name = DATA_CACHE.name.." ("..DATA_CACHE.id..")"
-        presets = util.JSONToTable(file.Read("settings/addonpresets.txt", true))
+        local preset_json = LoadAddonPresets()
+        local presets = {} -- In case the user has no presets
+        if preset_json then
+            presets = util.JSONToTable(preset_json)
+        end
         presets[preset_name] = {}
         
         target_preset = presets[preset_name]

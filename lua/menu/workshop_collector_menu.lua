@@ -269,7 +269,11 @@ Please don't delete me, otherwise Workshop Collector will break!
     -- Submit Collection
     GUI.Submit.DoClick = function()
         local preset_name = DATA_CACHE.name.." ("..DATA_CACHE.id..")"
-        presets = util.JSONToTable(LoadAddonPresets())
+        local preset_json = LoadAddonPresets()
+        local presets = {} -- In case the user has no presets
+        if preset_json then
+            presets = util.JSONToTable(preset_json)
+        end
         presets[preset_name] = {}
         
         target_preset = presets[preset_name]
