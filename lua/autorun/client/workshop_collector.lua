@@ -2,6 +2,7 @@ local GUI = {}
 local SCRW = ScrW()
 local SCRH = ScrH()
 local LAST_WORKSHOP = "Collection URL or ID here"
+local MENU_VERSION = "2.2"
 local DATA_CACHE = {}
 
 --------------------------------------------------------------------------------
@@ -245,7 +246,7 @@ concommand.Add("workshop_collector_menu", WorkshopCollectorMenu)
     -- Submit Collection
     GUI.Submit.DoClick = function()
         local preset_name = DATA_CACHE.name.." ("..DATA_CACHE.id..")"
-        local preset_json = LoadAddonPresets()
+        local preset_json = file.Read("settings/addonpresets.txt", true)
         local presets = {} -- In case the user has no presets
         if preset_json then
             presets = util.JSONToTable(preset_json)
@@ -306,7 +307,6 @@ end
 --------------------------------------------------------------------------------
 -- No manual install: run the client state menu
 if not file.Exists("workshop_collector/is_running_menu_install.txt", "DATA") then
-    print("no manual install exists")
     -- Old menu command
     concommand.Add("workshop_collector_menu", function()
         WorkshopCollectorMenu()
@@ -322,6 +322,7 @@ if not file.Exists("workshop_collector/is_running_menu_install.txt", "DATA") the
         spawnmenu.AddToolMenuOption(
             "Utilities", "User", "WorkshopCollectorToolMenu", 
             "Workshop Collector", "", "", function(pnl)
+                pnl:SetName("Workshop Collector")
                 pnl:Help("You currently have the old version of Workshop Collector installed. See the guide for information on how to use the improved new version.")
                 pnl:Button("Open Guide", "workshop_collector_link")
                 pnl:Help("Open The OLD Workshop Collector")
@@ -331,18 +332,35 @@ if not file.Exists("workshop_collector/is_running_menu_install.txt", "DATA") the
 
 -- Manual install exists: run the menu state menu with a popup
 else
-    print("manual install exists")
     -- New menu command
     concommand.Add("workshop_collector_menu_popup", function()
         Derma_Message("Check your escape menu for the Workshop Collector menu")
         LocalPlayer():ConCommand("workshop_collector_menu")
     end)
 
+    -- Manual install version checking
+    local version_file = file.Read("workshop_collector/is_running_menu_install.txt", "DATA")
+    local version_string = string.match(version_file, "Version [%d%.]+")
+    local version_num = "2.0"
+    if version_string then
+        version_num = string.match(version_string, "[%d%.]+")
+    end
+        
+    concommand.Add("workshop_collector_menu_update", function()
+        gui.OpenURL("https://github.com/Lemon-B-Citrom/gm-workshop-collector/releases")
+    end)
+
+
     -- Hook new menu through spawnmenu
     hook.Add("PopulateToolMenu", "WorkshopCollectorPopulateToolMenu", function()
         spawnmenu.AddToolMenuOption(
             "Utilities", "User", "WorkshopCollectorToolMenu", 
             "Workshop Collector", "", "", function(pnl)
+                pnl:SetName("Workshop Collector")
+                if version_num != MENU_VERSION then
+                    pnl:Help("Your manual install of workshop collector is outdated. Found "..version_num..", newest is "..MENU_VERSION)
+                    pnl:Button("See releases", "workshop_collector_menu_update")
+                end
                 pnl:Help("Open The Workshop Collector in the escape menu")
                 pnl:Button("Open Menu", "workshop_collector_menu_popup")
             end)

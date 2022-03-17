@@ -2,21 +2,22 @@ local GUI = {}
 local SCRW = ScrW()
 local SCRH = ScrH()
 local LAST_WORKSHOP = "Collection URL or ID here"
+local MENU_VERSION = "2.2"
 local DATA_CACHE = {}
 
 --------------------------------------------------------------------------------
 -- Create is_running_menu_install.txt to notify the client that a menu version
 -- is indeed installed
 --------------------------------------------------------------------------------
-text = [[
-Dearest user,
+local text = 
+    "Version "..MENU_VERSION.."\n"..
+    "Dearest user,\n\n"..
 
-Please don't delete me, otherwise Workshop Collector will break!
-Don't you love workarounds?
+    "Please don't delete me, otherwise Workshop Collector will break!\n"..
+    "Don't you love workarounds?\n\n"..
 
-Yours truly,
-Lemon
-]]
+    "Yours truly,\n"..
+    "Lemon\n"
 file.CreateDir("workshop_collector")
 file.Write("workshop_collector/is_running_menu_install.txt", text)
 
@@ -196,11 +197,8 @@ local function WorkshopCollectorMenu()
     local frame_posx = SCRW/2 - frame_width/2
     local frame_posy = SCRH/2 - frame_height/2
     GUI.Frame = vgui.Create("DFrame")
-    GUI.Frame:SetTitle("Workshop Collector")
+    GUI.Frame:SetTitle("Workshop Collector v"..MENU_VERSION)
     GUI.Frame:SetSize(frame_width, frame_height)
-    text = [[
-Please don't delete me, otherwise Workshop Collector will break!
-]]
     file.CreateDir("workshop_collector")
     file.Write("workshop_collector/is_running_menu_install.txt", text)
     GUI.Frame:SetPos(frame_posx, frame_posy)
@@ -222,9 +220,7 @@ Please don't delete me, otherwise Workshop Collector will break!
     GUI.Query:SetPos(10, 70)
     GUI.Query:SetSize((frame_width - 20)/2, 20)
     GUI.Query:SetText("Select Collection")
-    text = [[
-Please don't delete me, otherwise Workshop Collector will break!
-]]
+
     file.CreateDir("workshop_collector")
     file.Write("workshop_collector/is_running_menu_install.txt", text)
     GUI.Submit = vgui.Create("DButton", GUI.Frame)
